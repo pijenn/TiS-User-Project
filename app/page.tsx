@@ -11,7 +11,7 @@ export default function Home() {
   // Ambil data dari API
   const fetchItems = async () => {
     try {
-      const res = await fetch("http://192.168.x.x:port/items"); 
+      const res = await fetch("http://localhost:8000/items"); 
       if (!res.ok) throw new Error("Gagal mengambil data");
       const data = await res.json();
       setItems(data);
@@ -26,17 +26,15 @@ export default function Home() {
 
   const handleBuy = async (id: string) => {
     try {
-      const res = await fetch("http://192.168.x.x:port/buy", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itemId: id }),
-      });
-      if (!res.ok) throw new Error("Gagal membeli barang");
-      alert("Barang berhasil dibeli!");
-    } catch (err) {
-      setError("Terjadi kesalahan saat membeli barang");
-    }
-  };
+    const res = await fetch(`http://localhost:8000/items/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Gagal membeli");
+    fetchItems();
+  } catch (err) {
+    setError("Terjadi kesalahan saat membeli");
+  }
+};
 
   return (
     <div className="container mx-auto p-4">
