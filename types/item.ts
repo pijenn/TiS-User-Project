@@ -5,3 +5,10 @@ export interface Item {
     harga: number;
     gambar: string;
   }
+  
+export interface CartItem {
+  id: string;
+  item_id: string;
+  quantity: number;
+  item: Item;
+}

@@ -1,11 +1,13 @@
 import { Item } from "../types/item";
+import { useCart } from "../context/CartContext";
 
 interface ItemCardProps {
   item: Item;
-  onBuy: (id: string) => void;
 }
 
-const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy }) => {
+const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
+  const { addToCart } = useCart();
+
   return (
     <div className="border rounded-lg p-4 shadow-md bg-white">
       <img
@@ -17,11 +19,20 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onBuy }) => {
       <p className="text-gray-600">{item.deskripsi}</p>
       <p className="text-lg font-semibold">Rp {item.harga.toLocaleString()}</p>
       <button
-        onClick={() => onBuy(item.id)}
-        className="bg-green-500 text-white px-4 py-2 rounded mt-4 hover:bg-green-600"
-      >
-        Beli
-      </button>
+  onClick={async () => {
+    try {
+      await addToCart(item.id);
+      alert("Berhasil ditambahkan ke keranjang");
+    } catch (error) {
+      console.error("Gagal menambahkan item ke keranjang", error);
+      alert("Gagal menambahkan item. Cek console.");
+    }
+  }}
+  className="bg-green-500 text-white px-4 py-2 rounded mt-4 hover:bg-green-600"
+>
+  Tambah ke Keranjang
+</button>
+
     </div>
   );
 };
